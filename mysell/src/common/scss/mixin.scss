@@ -1,0 +1,42 @@
+@mixin bg-image($url) {
+  background-image: url($url + '@2x.png');
+  @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
+    background-image: url($url + '@3x.png');
+  }
+}
+
+@function px2em($px, $base-font-size: 16px) {
+  @if (unitless($px)) {
+    @warn "Assuming #{$px} to be in pixels, attempting to convert it into pixels for you";
+    @return px2em($px + 0px); // That may fail.
+  } @else if (unit($px) == em) {
+    @return $px;
+  }
+  @return ($px / $base-font-size) * 1em;
+}
+
+@function size($size) {
+  $width: 750;
+  $scale: 10;
+  @return ($size / $width * $scale) * 1rem;
+}
+
+@mixin data-dpr($field, $val) {
+  [data-dpr="1"] & {
+    #{$field}: $val;
+  }
+  [data-dpr="2"] & {
+    #{$field}: $val * 2;
+  }
+  [data-dpr="3"] & {
+    #{$field}: $val * 3;
+  }
+}
+
+@mixin font-size($size) {
+  @include data-dpr('font-size', $size);
+}
+
+@mixin border($size) {
+  border: size($size) solid #dddddd;
+}
