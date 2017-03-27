@@ -35,6 +35,24 @@
         <div class="detail-wrap">
           <div class="detail-main clearfix">
             <h1 class="name">{{seller.name}}</h1>
+            <div class="star-wrapper">
+              <star :size="48" :score="seller.score"></star>
+            </div>
+            <div class="title-wrapper">
+              <titles :text="0"></titles>
+            </div>
+            <ul v-if="seller.supports" class="supports">
+              <li class="support-item" v-for="(item,index) in seller.supports">
+                <span class="icon" :class="classMap[seller.supports[index].type]"></span>
+                <span class="text">{{seller.supports[index].description}}</span>
+              </li>
+            </ul>
+            <div class="title-wrapper">
+              <titles :text="1"></titles>
+            </div>
+            <div class="bulletin-des">
+              <p class="content">{{seller.bulletin}}</p>
+            </div>
           </div>
         </div>
         <div class="detail-close">
@@ -45,6 +63,9 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
+  import star from '../star/star.vue';
+  import titles from '../titles/titles.vue';
+
   export default{
     props: {
       seller: {
@@ -68,8 +89,11 @@
       hideDetail() {
         this.detailShow = false;
       }
+    },
+    components: {
+      star,
+      titles
     }
-
   };
 </script>
 <style lang="scss" rel="stylesheet/scss">
@@ -136,16 +160,16 @@
               @include bg-image('decrease_1');
             }
             &.discount {
-              @include bg-image('decrease_1');
+              @include bg-image('discount_1');
             }
             &.guarantee {
-              @include bg-image('decrease_1');
+              @include bg-image('guarantee_1');
             }
             &.invoice {
-              @include bg-image('decrease_1');
+              @include bg-image('invoice_1');
             }
             &.special {
-              @include bg-image('decrease_1');
+              @include bg-image('special_1');
             }
           }
           .text {
@@ -247,12 +271,72 @@
           width: 100%;
           margin-top: size(128);
           padding-bottom: size(128);
-          .name{
+          .name {
             text-align: center;
             font-size: size(32);
             line-height: size(32);
             font-weight: 700;
-            color: rgb(255,255,255);
+            color: rgb(255, 255, 255);
+          }
+          .star-wrapper {
+            margin-top: size(36);
+            padding: size(4) 0;
+            text-align: center;
+          }
+          .title-wrapper {
+            width: 80%;
+            margin: size(56) auto size(48) auto;
+          }
+          .supports {
+            width: 80%;
+            margin: 0 auto;
+            .support-item {
+              padding: 0 size(24);
+              margin-bottom: size(24);
+              font-size: 0;
+              &:last-child {
+                margin-bottom: 0;
+              }
+              .icon {
+                display: inline-block;
+                width: size(32);
+                height: size(32);
+                vertical-align: top;
+                margin-right: size(12);
+                background-size: size(32) size(32);
+                background-repeat: no-repeat;
+                &.decrease {
+                  @include bg-image('decrease_2');
+                }
+                &.discount {
+                  @include bg-image('discount_2');
+                }
+                &.guarantee {
+                  @include bg-image('guarantee_2');
+                }
+                &.invoice {
+                  @include bg-image('invoice_2');
+                }
+                &.special {
+                  @include bg-image('special_2');
+                }
+              }
+              .text {
+                line-height: size(32);
+                font-size: size(24);
+                color: rgb(255, 255, 255);
+              }
+            }
+          }
+          .bulletin-des{
+            width: 80%;
+            margin: 0 auto;
+            .content{
+              padding: 0 size(24);
+              line-height: size(48);
+              font-size: size(24);
+              color: rgb(255,255,255);
+            }
           }
         }
       }
@@ -261,12 +345,12 @@
         margin-top: size(-128);
         clear: both;
         height: size(128);
-        span{
+        span {
           display: block;
           margin: 0 auto;
           text-align: center;
           font-size: size(64);
-          color: rgba(255,255,255,0.5);
+          color: rgba(255, 255, 255, 0.5);
         }
       }
     }
