@@ -14,28 +14,34 @@
         <router-link to="/seller">商家</router-link>
       </div>
     </div>
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import header from 'components/header/header.vue';
-
+  import {urlParse} from 'common/js/util';
   const ERR_OK = 0;
 
   export default {
     data() {
       return {
         seller: {
-          type: Object
+          id: (() => {
+            let queryParam = urlParse();
+//            console.log(queryParam);
+            return queryParam.id;
+          })()
         }
       };
     },
     created() {
-      this.$http.get('/api/seller').then((response) => {
+      this.$http.get('/api/seller?id=' + this.seller.id).then((response) => {
         response = response.body;
         if (response.errno === ERR_OK) {
-          this.seller = response.data;
+          this.seller = Object.assign({}, this.seller, response.data);// 扩展seller.id属性
         }
       });
     },
@@ -47,23 +53,24 @@
 
 <style lang="scss" rel="stylesheet/scss">
   @import "./common/scss/mixin.scss";
-  .tab{
+
+  .tab {
     width: 100%;
     height: size(80);
     display: flex;
-    border-bottom: size(1) solid rgba(7,17,27,0.1);
-    .tab-item{
+    border-bottom: size(1) solid rgba(7, 17, 27, 0.1);
+    .tab-item {
       flex: 1;
-      margin:auto;
+      margin: auto;
       text-align: center;
-      font-size:size(28);
+      font-size: size(28);
       line-height: size(28);
-      a{
+      a {
         display: block;
-        text-decoration:none;
-        color: rgb(77,85,93);
-        &.active{
-          color: rgb(240,20,20);
+        text-decoration: none;
+        color: rgb(77, 85, 93);
+        &.active {
+          color: rgb(240, 20, 20);
         }
       }
     }

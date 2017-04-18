@@ -69,7 +69,6 @@
         if (!event._constructed) {
           return;
         }
-
         this.$emit('toggle');
       }
     }
